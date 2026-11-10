@@ -1,0 +1,162 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ── Design tokens: "Midnight Kitchen" ─────────────────────── */
+:root,
+[data-theme='dark'] {
+  --bg: #080b12;
+  --bg-2: #111827;
+  --surface: rgba(17, 24, 39, 0.72);
+  --surface-solid: #0f1522;
+  --line: rgba(148, 163, 184, 0.14);
+  --line-strong: rgba(148, 163, 184, 0.28);
+  --fg: #f8fafc;
+  --fg-2: #94a3b8;
+  --fg-3: #8291a7;
+  --gold: #d4af37;
+  --gold-soft: rgba(212, 175, 55, 0.14);
+  --green: #4ade80;
+  --green-ink: #052e16;
+  --green-soft: rgba(74, 222, 128, 0.12);
+  --glow-gold: rgba(212, 175, 55, 0.22);
+  --glow-green: rgba(74, 222, 128, 0.16);
+  --shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #f7f5f0;
+  --bg-2: #ffffff;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-solid: #ffffff;
+  --line: rgba(11, 15, 23, 0.1);
+  --line-strong: rgba(11, 15, 23, 0.2);
+  --fg: #0b0f17;
+  --fg-2: #475569;
+  --fg-3: #556274;
+  --gold: #8f6d12;
+  --gold-soft: rgba(168, 132, 31, 0.12);
+  --green: #15803d;
+  --green-ink: #f0fdf4;
+  --green-soft: rgba(21, 128, 61, 0.1);
+  --glow-gold: rgba(212, 175, 55, 0.25);
+  --glow-green: rgba(74, 222, 128, 0.22);
+  --shadow: 0 30px 80px -30px rgba(15, 23, 42, 0.25);
+  color-scheme: light;
+}
+
+:root { --font-ethiopic: 'Noto Sans Ethiopic', Kefa, Nyala, Ebrima, 'Abyssinica SIL'; }
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-green: var(--green);
+  --color-green-ink: var(--green-ink);
+  --color-green-soft: var(--green-soft);
+  --font-display: var(--font-fraunces), var(--font-ethiopic), Georgia, serif;
+  --font-sans: var(--font-inter-tight), var(--font-ethiopic), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), var(--font-ethiopic), ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+html {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-padding-top: 6rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+body {
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+::selection { background: var(--gold); color: #080b12; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 6px; }
+
+/* Ambient lighting + grain behind every page */
+.ambient {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60vw 50vh at 85% -10%, var(--glow-gold), transparent 70%),
+    radial-gradient(50vw 45vh at -10% 30%, var(--glow-green), transparent 70%),
+    var(--bg);
+}
+.ambient::after {
+  content: ''; position: absolute; inset: 0; opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Reusable utilities ───────────────────────────────────── */
+@utility glass {
+  background: var(--surface);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--line);
+}
+@utility text-gradient-gold {
+  background: linear-gradient(100deg, #f5e6a8 0%, var(--gold) 45%, #a8841f 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+@utility container-x {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+@utility hairline {
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+  height: 1px;
+}
+
+[data-theme='light'] .text-gradient-gold {
+  background: linear-gradient(100deg, #b8902a, #8f6d12 60%, #6b500b);
+  -webkit-background-clip: text; background-clip: text;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(100deg, var(--bg-2) 30%, var(--line-strong) 50%, var(--bg-2) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+@keyframes float-y { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-14px) rotate(var(--r, 0deg)); } }
+.float { animation: float-y 7s ease-in-out infinite; }
+
+/* Entrance animations that run before hydration (good for LCP) */
+@keyframes enter { from { opacity: 0; transform: translateY(var(--y, 14px)); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { transform: translateY(105%) rotate(6deg); } to { transform: none; } }
+@keyframes scale-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+.enter { animation: enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--d, 0s); }
+.rise { animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--d, 0s); }
+.scale-in { animation: scale-in 1.3s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--d, 0s); }
+.page-enter { animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes scroll-dot { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(14px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
